@@ -1,0 +1,16 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cek Invoice · Chaizenhub</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/theme.css"></head>
+<body><div class="glow"></div><div id="hdr"></div>
+<main class="relative z-10 max-w-2xl mx-auto px-5 pt-12 md:pt-20">
+<h1 class="disp text-3xl md:text-5xl font-bold text-center">Lacak pesananmu</h1><p class="mut text-center mt-3">Masukkan kode invoice yang diawali <b class="text-[#1E0A08]">CZH-</b></p>
+<form id="f" class="glass rounded-full p-2 flex mt-8"><input id="c" placeholder="CZH-XXXXXXX" class="bg-transparent flex-1 px-5 outline-none uppercase min-w-0"><button class="btn-lime rounded-full px-6 py-3">Cek</button></form>
+<div id="r" class="mt-8"></div>
+<div id="h" class="mt-10"></div></main><footer id="ftr"></footer>
+<script src="/assets/app.js"></script><script>
+shell("Cek Invoice");
+const all=()=>JSON.parse(localStorage.czh||"{}");
+const show=id=>{const o=all()[id.trim().toUpperCase()];if(!o){r.innerHTML=`<div class="cardx rounded-3xl p-6 text-center mut">Invoice <b class="text-[#1E0A08]">${id||"–"}</b> tidak ditemukan di perangkat ini.</div>`;return}
+r.innerHTML=`<div class="cardx rounded-[28px] overflow-hidden"><div class="p-7 bg-[#930500] text-[#FFF8E7]"><p class="text-xs font-semibold opacity-70">INVOICE</p><p class="disp text-2xl font-bold mt-1">${o.id}</p><p class="inline-flex items-center gap-2 mt-4 bg-[#FFF8E7] text-[#930500] rounded-full text-xs font-semibold px-3 py-1.5">● Berhasil</p></div><dl class="p-7 space-y-3 text-sm">${[["Produk",o.t+" · "+o.i],["Provider",o.p],["Tujuan",o.n],["Metode",o.m],["Waktu",new Date(o.at).toLocaleString("id-ID")],["Total",rp(o.tot)]].map(([a,b])=>`<div class="flex justify-between gap-4"><dt class="mut">${a}</dt><dd class="font-medium text-right">${b}</dd></div>`).join("")}</dl><p class="px-7 pb-7 text-xs mut">Simulasi: pembayaran belum terhubung ke payment gateway.</p></div>`};
+f.onsubmit=e=>{e.preventDefault();show(c.value)};
+const p=new URLSearchParams(location.search).get("id");if(p){c.value=p;show(p)}
+const L2=Object.values(all()).sort((a,b)=>b.at-a.at).slice(0,5);if(L2.length)h.innerHTML=`<p class="text-sm mut mb-3">Riwayat di perangkat ini</p><div class="space-y-2">${L2.map(o=>`<button onclick="c.value='${o.id}';show('${o.id}')" class="opt w-full rounded-2xl p-4 flex justify-between text-sm"><span>${o.t} · ${o.i}</span><span class="mut">${o.id}</span></button>`).join("")}</div>`;
+</script></body></html>

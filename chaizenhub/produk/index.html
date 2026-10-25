@@ -1,0 +1,56 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Produk · Chaizenhub</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/theme.css">
+<style>
+.step{counter-increment:st}
+.num{width:28px;height:28px;border-radius:99px;display:grid;place-items:center;font-size:13px;font-weight:700;background:#1E0A08;color:#FFF8E7;flex-shrink:0}
+.done .num{background:#930500}
+.nom{position:relative}
+.nom.on .ck{opacity:1;transform:scale(1)}
+.ck{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:99px;background:#930500;color:#FFF8E7;display:grid;place-items:center;opacity:0;transform:scale(.5);transition:.2s}
+.chip.on{background:#1E0A08;color:#FFF8E7;border-color:#1E0A08;box-shadow:none}
+.chip.on .av{background:#F3CFC9;color:#1E0A08}
+</style></head>
+<body><div id="hdr"></div>
+<main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-5 pt-5 md:pt-10 pb-40 md:pb-12">
+<a href="/#produk" class="inline-flex items-center gap-1.5 text-sm mut hover:text-[#930500]"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>Semua produk</a>
+<section class="rise mt-4 rounded-[28px] bg-[#930500] text-[#FFF8E7] p-6 md:p-10 relative overflow-hidden">
+<span class="absolute -right-14 -top-14 w-28 h-28 md:-right-10 md:-top-10 md:w-64 md:h-64 rounded-[48px] bg-[#F3CFC9] rotate-12"></span>
+<span class="absolute right-24 bottom-6 w-6 h-6 rounded-full bg-[#FFF8E7]/30 hidden md:block"></span>
+<div class="relative flex items-start gap-4 md:gap-6">
+<span id="ic" class="w-14 h-14 md:w-20 md:h-20 rounded-2xl md:rounded-3xl bg-[#FFF8E7] text-[#930500] grid place-items-center shrink-0"></span>
+<div class="min-w-0"><p id="cat" class="text-[11px] md:text-xs uppercase tracking-[.2em] text-[#FFF8E7]/70"></p><h1 id="ttl" class="disp text-3xl md:text-5xl font-extrabold leading-tight"></h1><p id="dsc" class="text-[#FFF8E7]/80 mt-2 text-sm md:text-base max-w-md"></p></div></div>
+<div class="relative flex flex-wrap gap-2 mt-6 text-xs md:text-sm"><span class="bg-[#FFF8E7]/15 rounded-full px-3 py-1.5">⚡ Proses ±5 detik</span><span class="bg-[#FFF8E7]/15 rounded-full px-3 py-1.5">↺ Gagal = refund</span><span class="bg-[#FFF8E7]/15 rounded-full px-3 py-1.5">Buka 24 jam</span></div>
+</section>
+<div class="grid lg:grid-cols-[1fr_370px] gap-5 md:gap-6 mt-5 md:mt-6 items-start">
+<div class="space-y-4 md:space-y-5">
+<section id="s1" class="cardx rounded-[24px] p-5 md:p-7 rise"><div class="flex items-center gap-3"><span class="num">1</span><label id="lb" for="no" class="font-semibold text-lg"></label></div>
+<div class="relative mt-4"><input id="no" inputmode="numeric" autocomplete="tel" class="inp w-full rounded-2xl pl-5 pr-28 py-4 text-lg tracking-wide"><span id="det" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 bg-[#F3CFC9] text-[#1E0A08] text-xs font-bold rounded-full px-3 py-1.5"><span id="detn"></span> ✓</span></div>
+<p id="hint" class="text-xs mut mt-2.5"></p></section>
+<section id="pvs" class="cardx rounded-[24px] p-5 md:p-7 rise"><div class="flex items-center gap-3"><span class="num">2</span><p class="font-semibold text-lg">Pilih provider</p></div><div id="pv" class="flex gap-2 mt-4 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0 md:flex-wrap pb-1"></div></section>
+<section id="s3" class="cardx rounded-[24px] p-5 md:p-7 rise"><div class="flex items-center gap-3"><span id="lc" class="num">3</span><p id="nl" class="font-semibold text-lg">Pilih nominal</p></div><div id="it" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 md:gap-3 mt-4"></div></section>
+</div>
+<aside class="hidden lg:block sticky top-24"><div class="glass rounded-[24px] p-7"><p class="disp text-xl font-bold">Ringkasan</p><dl id="sm" class="mt-5 space-y-3 text-sm"></dl><div class="border-t border-dashed border-black/15 mt-5 pt-5 flex justify-between items-end"><span class="mut text-sm">Total bayar</span><span id="tt" class="disp text-3xl font-extrabold">Rp0</span></div><button id="go" disabled class="btn-lime w-full rounded-2xl py-4 mt-6 text-base">Lanjut bayar →</button><p class="text-xs mut text-center mt-3">Tanpa daftar akun · bayar via QRIS, VA, e-wallet</p></div></aside>
+</div></main>
+<div class="lg:hidden fixed bottom-0 inset-x-0 z-40 px-3 pb-[max(10px,env(safe-area-inset-bottom))]"><div class="bg-[#1E0A08] text-[#FFF8E7] rounded-[22px] pl-5 pr-2 py-2 flex items-center gap-3 shadow-[0_14px_30px_-12px_rgba(30,10,8,.5)]"><div class="flex-1 min-w-0"><p id="mi" class="text-[11px] text-[#FFF8E7]/60 truncate">Pilih nominal dulu</p><p id="mt" class="disp text-lg font-bold leading-tight">Rp0</p></div><button id="mgo" disabled class="bg-[#FFF8E7] text-[#930500] font-bold rounded-2xl px-5 py-3.5 disabled:opacity-40">Bayar →</button></div></div>
+<footer id="ftr"></footer>
+<script src="/assets/app.js"></script><script>
+shell("Produk",{hideFootMobile:1});
+const q=new URLSearchParams(location.search),k=D[q.get("s")]?q.get("s"):"pulsa",x=D[k];let P=x.auto?null:x.prov[0],I=null;
+document.title=x.t+" · Chaizenhub";ic.innerHTML=svg(k,"w-7 h-7 md:w-9 md:h-9");cat.textContent=x.c;ttl.textContent=x.t;dsc.textContent=x.d;lb.textContent=x.inp;no.placeholder=x.ph;if(q.get("n"))no.value=q.get("n");
+hint.textContent=x.auto?"Operator terdeteksi otomatis dari 4 digit pertama.":x.bill?"Tagihan muncul otomatis setelah ID diisi.":"Pastikan data benar, transaksi sukses tidak bisa dibatalkan.";
+if(x.auto){pvs.classList.add("hidden");lc.textContent="2"}
+const list=()=>(x.byp&&x.byp[P])||x.items||[];
+const bill=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%9973;return 75000+(h*137)%250000};
+const ck='<span class="ck"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="m5 12 5 5 9-10"/></svg></span>';
+const items=()=>{if(x.bill){nl.textContent="Tagihan kamu";const n=no.value.trim();it.className="mt-4";it.innerHTML=n.length>5?`<div class="opt on rounded-2xl p-5 flex justify-between items-center gap-4"><div><b>Tagihan ${P}</b><p class="text-xs mut mt-1">Pelanggan •••${n.slice(-4)} · termasuk admin Rp2.500 · contoh</p></div><b class="disp text-xl whitespace-nowrap">${rp(bill(n+P))}</b></div>`:`<div class="rounded-2xl bg-[#FFF8E7] border border-dashed border-black/15 p-5 text-sm mut">Isi ${x.inp.toLowerCase()} dulu, tagihan muncul otomatis.</div>`;I=n.length>5?["Tagihan "+P,bill(n+P)]:null;return}
+if(x.auto&&!P){it.innerHTML=`<div class="col-span-full rounded-2xl bg-[#FFF8E7] border border-dashed border-black/15 p-5 text-sm mut">Ketik nomor HP dulu, nominal muncul sesuai operatormu.</div>`;return}
+const L=list();it.innerHTML=L.map((a,i)=>`<button data-i="${i}" class="nom opt rounded-2xl p-4 text-left min-h-[84px] flex flex-col justify-between ${I&&I[0]==a[0]?"on":""}">${ck}${i==Math.min(2,L.length-1)?`<span class="self-start text-[10px] font-bold uppercase tracking-wider bg-[#F3CFC9] rounded-full px-2 py-0.5 mb-2">Populer</span>`:""}<b class="block text-base leading-snug pr-5">${a[0]}</b><span class="text-sm text-[#930500] font-semibold mt-1">${rp(a[1])}</span></button>`).join("")};
+pv.innerHTML=x.prov.map((p,i)=>`<button data-p="${p}" class="chip opt shrink-0 rounded-full pl-1.5 pr-4 py-1.5 text-sm font-medium flex items-center gap-2 ${i==0?"on":""}"><span class="av w-8 h-8 rounded-full bg-[#FFF8E7] text-[#930500] grid place-items-center text-xs font-bold">${p.replace(/[^A-Za-z0-9 ]/g,"").split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase()}</span>${p}</button>`).join("");
+pv.onclick=e=>{const b=e.target.closest("button");if(!b)return;pv.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");P=b.dataset.p;if(!x.bill)I=null;items();sum()};
+it.onclick=e=>{const b=e.target.closest("button[data-i]");if(!b)return;I=list()[b.dataset.i];items();sum()};
+no.oninput=()=>{if(x.auto){const n=no.value.replace(/\D/g,"").replace(/^62/,"0"),o=Object.keys(OP).find(o=>OP[o].includes(n.slice(0,4)))||null;if(o!==P){P=o;I=null}det.classList.toggle("hidden",!o);detn.textContent=o||""}items();sum()};
+const okNo=()=>no.value.replace(/\D/g,"").length>=(x.auto?10:6);
+const ok=()=>okNo()&&P&&I;
+const sum=()=>{s1.classList.toggle("done",okNo());const r=[["Produk",x.t],["Provider",P||"–"],["Item",I?I[0]:"–"],["Tujuan",no.value||"–"]];sm.innerHTML=r.map(([a,b])=>`<div class="flex justify-between gap-4"><dt class="mut">${a}</dt><dd class="font-semibold text-right truncate">${b}</dd></div>`).join("");const t=I?rp(I[1]):"Rp0";tt.textContent=t;mt.textContent=t;mi.textContent=I?`${P} · ${I[0]}`:(okNo()?"Pilih nominal dulu":"Isi "+x.inp.toLowerCase()+" dulu");go.disabled=mgo.disabled=!ok()};
+const pay=()=>{if(!ok())return;location.href=`/bayar?s=${k}&p=${encodeURIComponent(P)}&i=${encodeURIComponent(I[0])}&n=${encodeURIComponent(no.value.replace(/\s/g,""))}&a=${I[1]}`};go.onclick=mgo.onclick=pay;
+no.oninput();
+</script></body></html>

@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600;700&display=swap');
+:root{--bg:#FFF8E7;--card:#FFFFFF;--line:rgba(147,5,0,.12);--pri:#930500;--txt:#1E0A08;--mut:#7A6560}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--txt);font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.disp{font-family:"Schibsted Grotesk",sans-serif;letter-spacing:-.035em}
+.glass{background:#fff;border:1px solid var(--line);box-shadow:6px 6px 0 #F3CFC9}
+.cardx{background:var(--card);border:1px solid var(--line)}
+.glow{display:none}
+.grid-bg{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(70% 60% at 50% 0%,#000 40%,transparent)}
+.btn-lime{background:var(--pri);color:#fff;font-weight:600;transition:.2s}
+.btn-lime:hover{box-shadow:0 0 0 6px rgba(147,5,0,.15)}
+.btn-lime:disabled{opacity:.35;box-shadow:none}
+.opt{border:1px solid var(--line);background:#fff;transition:.15s}
+.opt:hover{border-color:rgba(147,5,0,.4)}
+.opt.on{border-color:var(--pri);background:rgba(147,5,0,.06);box-shadow:inset 0 0 0 1px var(--pri)}
+.inp{background:#FFF8E7;border:1px solid var(--line);outline:none;transition:.15s}
+.inp:focus{border-color:var(--pri);background:#fff;box-shadow:0 0 0 4px rgba(147,5,0,.15)}
+.mut{color:var(--mut)}
+.lime{color:var(--pri)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.marq{animation:mq 40s linear infinite}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.rise{animation:rise .7s cubic-bezier(.2,.8,.2,1) both}
+details summary::-webkit-details-marker{display:none}
+details[open] .pl{transform:rotate(45deg)}
+.btn-lime:hover{background:#6e0400}

@@ -1,0 +1,13 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bantuan · Chaizenhub</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/theme.css"></head>
+<body><div class="glow"></div><div id="hdr"></div>
+<main class="relative z-10 max-w-6xl mx-auto px-5 pt-12 md:pt-20 grid lg:grid-cols-[1fr_1.5fr] gap-12">
+<div><p class="text-sm lime">Pusat bantuan</p><h1 class="disp text-4xl md:text-5xl font-bold mt-2">Ada yang bisa dibantu?</h1><p class="mut mt-4">Cari jawaban cepat, atau hubungi tim kami.</p>
+<input id="s" placeholder="Cari pertanyaan…" class="inp w-full rounded-2xl px-5 py-4 mt-8">
+<div id="kontak" class="cardx rounded-[28px] p-7 mt-8"><p class="font-semibold">Kontak</p><p class="mut text-sm mt-2">WhatsApp & email resmi segera tersedia.</p><a href="/invoice" class="btn-lime inline-block rounded-full px-5 py-2.5 text-sm mt-5">Cek invoice</a></div></div>
+<div id="l" class="divide-y divide-black/10 border-y border-black/10 self-start"></div></main><footer id="ftr"></footer>
+<script src="/assets/app.js"></script><script>
+shell("Bantuan");
+const F=[["Pembayaran","Metode bayar apa saja?","QRIS, virtual account BCA/BRI/Mandiri, DANA, OVO, Alfamart dan Indomaret."],["Pembayaran","Ada biaya tambahan?","QRIS dan e-wallet gratis. Virtual account dan minimarket dikenakan biaya layanan yang tampil sebelum bayar."],["Pesanan","Berapa lama pesanan diproses?","Umumnya beberapa detik setelah pembayaran terkonfirmasi."],["Pesanan","Salah isi nomor tujuan?","Transaksi yang sudah sukses tidak bisa dibatalkan. Periksa nomor sebelum membayar."],["Pesanan","Pesanan gagal, uangnya ke mana?","Dana dikembalikan otomatis ke metode pembayaran awal."],["Akun","Harus daftar akun?","Tidak. Simpan saja kode invoice untuk melacak pesanan."],["Promo","Ada kode promo?","Pakai CHAIZEN5 untuk diskon 5%, maksimal Rp5.000."]];
+const d=t=>{l.innerHTML=F.filter(f=>(f[1]+f[2]).toLowerCase().includes(t)).map(([c,q,a])=>`<details class="py-5"><summary class="flex justify-between items-center cursor-pointer gap-4"><span><span class="text-[11px] uppercase tracking-widest mut block">${c}</span><span class="font-medium text-lg">${q}</span></span><span class="pl transition text-2xl lime">+</span></summary><p class="mut mt-3">${a}</p></details>`).join("")||`<p class="py-6 mut">Tidak ada hasil.</p>`};
+s.oninput=()=>d(s.value.toLowerCase());d("");
+</script></body></html>

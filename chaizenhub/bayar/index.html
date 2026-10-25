@@ -1,0 +1,26 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pembayaran · Chaizenhub</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/theme.css"></head>
+<body><div class="glow"></div><div id="hdr"></div>
+<main id="M" class="relative z-10 max-w-5xl mx-auto px-5 pt-8 md:pt-12 pb-36 md:pb-10"></main>
+<div id="mb" class="hidden lg:hidden fixed bottom-0 inset-x-0 z-40 bg-[#FFF8E7]/95 backdrop-blur-xl border-t border-black/10 px-5 pt-3 pb-[max(14px,env(safe-area-inset-bottom))]"><div class="flex items-center gap-3"><div class="flex-1"><p id="mi" class="text-xs mut">Pilih metode bayar</p><p id="mt" class="disp text-xl font-bold">Rp0</p></div><button id="mgo" disabled class="btn-lime rounded-2xl px-6 py-3.5">Bayar →</button></div></div>
+<footer id="ftr"></footer>
+<script src="/assets/app.js"></script><script>
+shell("",{hideFootMobile:1});
+const q=Object.fromEntries(new URLSearchParams(location.search)),base=+q.a||0,x=D[q.s];
+const PM=[["QRIS","Semua e-wallet & m-banking",0],["BCA Virtual Account","Cek otomatis",4000],["BRI Virtual Account","Cek otomatis",4000],["Mandiri Virtual Account","Cek otomatis",4000],["DANA","Langsung dari aplikasi",0],["OVO","Langsung dari aplikasi",0],["Alfamart","Bayar di kasir",2500],["Indomaret","Bayar di kasir",2500]];
+let m=null,disc=0;
+if(!x||!base){M.innerHTML=`<div class="cardx rounded-[28px] p-10 text-center"><p class="disp text-2xl font-bold">Belum ada pesanan</p><p class="mut mt-2">Pilih produk dulu ya.</p><a href="/#produk" class="btn-lime inline-block rounded-full px-6 py-3 mt-6">Lihat produk</a></div>`}else{
+M.innerHTML=`<p class="text-sm mut">Pembayaran</p><h1 class="disp text-3xl md:text-4xl font-bold mt-1">Satu langkah lagi</h1>
+<div class="grid lg:grid-cols-[1fr_340px] gap-6 mt-8"><div class="space-y-6">
+<div class="cardx rounded-[28px] p-6 md:p-8"><p class="font-semibold text-lg">Metode pembayaran</p><div id="pm" class="grid sm:grid-cols-2 gap-3 mt-5"></div></div>
+<div class="cardx rounded-[28px] p-6 md:p-8"><p class="font-semibold text-lg">Kode promo</p><div class="flex gap-2 mt-4"><input id="pc" placeholder="Contoh: CHAIZEN5" class="inp flex-1 rounded-2xl px-4 py-3 uppercase"><button id="ap" class="rounded-2xl px-5 border border-black/15 hover:bg-black/5">Pakai</button></div><p id="pmsg" class="text-sm mt-2"></p>
+<label class="block text-sm mut mt-6 mb-2">Email untuk invoice (opsional)</label><input id="em" type="email" placeholder="kamu@email.com" class="inp w-full rounded-2xl px-4 py-3"></div></div>
+<aside><div class="lg:sticky top-24 glass rounded-[28px] p-7"><p class="disp font-bold">Pesanan</p><div class="flex items-center gap-3 mt-5"><span class="w-11 h-11 rounded-xl bg-[#930500] text-white grid place-items-center">${svg(q.s,"w-5 h-5")}</span><div><b>${x.t} · ${q.i}</b><p class="text-xs mut">${q.p} · ${q.n}</p></div></div><dl id="sm" class="mt-6 space-y-2.5 text-sm"></dl><div class="border-t border-dashed border-black/10 mt-5 pt-5 flex justify-between items-end"><span class="mut text-sm">Total</span><span id="tt" class="disp text-2xl font-bold"></span></div><button id="pay" disabled class="hidden lg:block btn-lime w-full rounded-2xl py-4 mt-6">Bayar sekarang</button></div></aside></div>`;
+pm.innerHTML=PM.map((p,i)=>`<button data-i="${i}" class="opt rounded-2xl p-4 text-left flex justify-between items-center"><span><b class="block text-sm">${p[0]}</b><span class="text-xs mut">${p[1]}</span></span><span class="text-xs mut">${p[2]?"+"+rp(p[2]):"Gratis"}</span></button>`).join("");
+pm.onclick=e=>{const b=e.target.closest("button");if(!b)return;pm.querySelectorAll("button").forEach(z=>z.classList.remove("on"));b.classList.add("on");m=PM[b.dataset.i];S()};
+ap.onclick=()=>{if(pc.value.trim().toUpperCase()=="CHAIZEN5"){disc=Math.min(Math.round(base*.05),5000);pmsg.className="text-sm mt-2 lime";pmsg.textContent="Promo dipakai, hemat "+rp(disc)}else{disc=0;pmsg.className="text-sm mt-2 text-red-500";pmsg.textContent="Kode tidak berlaku"}S()};
+const tot=()=>base+(m?m[2]:0)-disc;
+window.S=()=>{sm.innerHTML=[["Harga",rp(base)],["Biaya layanan",m?(m[2]?rp(m[2]):"Gratis"):"–"],...(disc?[["Promo","-"+rp(disc)]]:[])].map(([a,b])=>`<div class="flex justify-between"><dt class="mut">${a}</dt><dd>${b}</dd></div>`).join("");tt.textContent=mt.textContent=rp(tot());pay.disabled=mgo.disabled=!m;mi.textContent=m?m[0]:"Pilih metode bayar"};
+mb.classList.remove("hidden");S();
+const done=()=>{const id="CZH-"+Date.now().toString(36).toUpperCase(),o={id,t:x.t,i:q.i,p:q.p,n:q.n,m:m[0],tot:tot(),at:Date.now()};const all=JSON.parse(localStorage.czh||"{}");all[id]=o;localStorage.czh=JSON.stringify(all);location.href="/invoice?id="+id};
+pay.onclick=mgo.onclick=()=>m&&done();}
+</script></body></html>

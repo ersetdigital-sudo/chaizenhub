@@ -1,0 +1,56 @@
+<!doctype html><html lang="id"><head><style>
+.wd{display:inline-block;opacity:0;transform:translateY(.5em) rotate(4deg);animation:wd .8s cubic-bezier(.2,.8,.2,1) var(--d) forwards}
+@keyframes wd{to{opacity:1;transform:none}}
+.rot{display:inline-block;overflow:hidden;vertical-align:bottom;opacity:0;animation:wd .8s .7s forwards}
+#rw{display:inline-block;transition:transform .45s cubic-bezier(.7,0,.3,1),opacity .45s}
+#rw.out{transform:translateY(-100%);opacity:0}#rw.in{transform:translateY(100%);opacity:0;transition:none}
+.shp{position:absolute;z-index:1;pointer-events:none;animation:fl 7s ease-in-out infinite;opacity:.9}
+@keyframes fl{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-18px) rotate(calc(var(--r) + 10deg))}}
+.flt{animation:rise .7s .5s cubic-bezier(.2,.8,.2,1) both,fl2 6s 1.2s ease-in-out infinite}
+@keyframes fl2{0%,100%{translate:0 0}50%{translate:0 -8px}}
+@media (prefers-reduced-motion:reduce){.wd,.rot,.shp,.flt{animation:none;opacity:1;transform:none}}
+</style><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chaizenhub · Top up & bayar tagihan</title><script src="https://cdn.tailwindcss.com"></script><link rel="stylesheet" href="/assets/theme.css"></head>
+<body class="overflow-x-hidden"><div class="glow"></div><div id="hdr"></div>
+<main class="relative z-10">
+<section class="relative"><div class="absolute inset-0 grid-bg"></div>
+<span class="shp hidden md:block" style="top:12%;left:46%;width:70px;height:70px;border-radius:22px;background:#F3CFC9;--r:12deg"></span><span class="shp hidden md:block" style="top:68%;left:4%;width:26px;height:26px;border-radius:99px;background:#930500;--r:0deg;animation-delay:-2s"></span><span class="shp hidden md:block" style="top:78%;left:52%;width:44px;height:44px;border-radius:99px;border:6px solid #F3CFC9;--r:0deg;animation-delay:-4s"></span>
+<div class="relative max-w-6xl mx-auto px-5 pt-10 md:pt-24 pb-12 md:pb-16 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center">
+<div class="rise"><p class="inline-flex items-center gap-2 text-xs mut border border-black/10 rounded-full px-3 py-1.5"><span class="w-1.5 h-1.5 rounded-full bg-[#930500] animate-pulse"></span>Sistem online 24 jam</p>
+<h1 class="disp text-[2.4rem] leading-[1.02] sm:text-5xl md:text-7xl font-extrabold mt-6"><span class="wd" style="--d:.1s">Top</span> <span class="wd" style="--d:.2s">up</span> <span class="wd" style="--d:.3s">apa</span> <span class="wd" style="--d:.4s">aja,</span><br><span class="wd" style="--d:.55s">tanpa</span> <span class="rot text-[#930500]"><span id="rw">ribet.</span></span></h1>
+<p class="mut text-base md:text-lg mt-5 max-w-md">Pulsa, kuota, token listrik, diamond game sampai tagihan bulanan. Ketik nomor, bayar, beres.</p>
+<div class="grid grid-cols-3 gap-3 mt-8 md:flex md:gap-8 md:mt-10"><div><p class="disp text-2xl font-bold" data-c="9">0</p><p class="text-xs mut mt-1">kategori produk</p></div><div><p class="disp text-2xl font-bold">24/7</p><p class="text-xs mut mt-1">transaksi otomatis</p></div><div><p class="disp text-2xl font-bold">0</p><p class="text-xs mut mt-1">akun wajib</p></div></div></div>
+<div class="rise glass rounded-[28px] p-6 md:p-8 flt" style="animation-delay:.5s"><p class="text-sm mut">Order kilat</p><p class="disp text-xl font-bold mt-1">Isi pulsa sekarang</p>
+<label class="block text-xs mut mt-6 mb-2">Nomor HP</label><div class="relative"><input id="qn" inputmode="numeric" placeholder="08xx xxxx xxxx" class="inp w-full rounded-2xl px-5 py-4 text-lg tracking-wide"><span id="qo" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold bg-[#930500] text-white rounded-full px-3 py-1 hidden"></span></div>
+<div id="qp" class="grid grid-cols-3 gap-2 mt-4"></div>
+<button id="qb" disabled class="btn-lime w-full rounded-2xl py-4 mt-5">Lanjut</button><p class="text-xs mut mt-3 text-center">Operator terdeteksi otomatis dari nomormu</p></div>
+</div></section>
+<div class="border-y border-black/5 py-4 overflow-hidden"><div class="marq flex gap-10 w-max text-sm mut whitespace-nowrap" id="mq"></div></div>
+<section id="produk" class="max-w-6xl mx-auto px-5 pt-16 md:pt-24"><div class="flex flex-wrap items-end justify-between gap-4"><div><p class="text-sm lime">Produk</p><h2 class="disp text-3xl md:text-5xl font-bold mt-2">Mau bayar apa hari ini?</h2></div><div class="flex gap-2 text-sm overflow-x-auto max-w-full" id="tabs"></div></div>
+<div id="grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-10"></div></section>
+<section class="max-w-6xl mx-auto px-5 pt-20 md:pt-28"><h2 class="disp text-3xl md:text-5xl font-bold max-w-xl">Tiga langkah, <span class="mut">nggak lebih.</span></h2>
+<div class="grid md:grid-cols-3 gap-px mt-10 bg-black/5 rounded-[28px] overflow-hidden">
+<div class="bg-[#FFFDF6] p-6 md:p-8"><p class="disp text-4xl md:text-5xl font-extrabold text-black/10">01</p><p class="font-semibold text-lg mt-6">Pilih produk</p><p class="mut text-sm mt-2">Ketik nomor atau ID, operator dan harga langsung muncul.</p></div>
+<div class="bg-[#FFFDF6] p-6 md:p-8"><p class="disp text-4xl md:text-5xl font-extrabold text-black/10">02</p><p class="font-semibold text-lg mt-6">Bayar</p><p class="mut text-sm mt-2">QRIS, virtual account, e-wallet, atau minimarket.</p></div>
+<div class="bg-[#FFFDF6] p-6 md:p-8"><p class="disp text-4xl md:text-5xl font-extrabold lime">03</p><p class="font-semibold text-lg mt-6">Langsung masuk</p><p class="mut text-sm mt-2">Simpan kode invoice untuk lacak transaksi kapan saja.</p></div></div></section>
+<section class="max-w-6xl mx-auto px-5 pt-20 md:pt-28 grid lg:grid-cols-[1fr_1.4fr] gap-10"><div><p class="text-sm lime">FAQ</p><h2 class="disp text-3xl md:text-4xl font-bold mt-2">Pertanyaan yang sering mampir</h2><a href="/bantuan" class="inline-block mt-6 text-sm border border-black/15 rounded-full px-5 py-2.5 hover:bg-black/5">Pusat bantuan →</a></div>
+<div class="divide-y divide-black/10 border-y border-black/10" id="faq"></div></section>
+</main><footer id="ftr"></footer>
+<script src="/assets/app.js"></script><script>
+shell("Beranda");
+const cats=[["Semua",null],["Isi ulang","Isi ulang"],["Tagihan","Tagihan"],["Hiburan","Hiburan"]];let cf=null;
+const draw=()=>{tabs.innerHTML=cats.map(([l,v])=>`<button data-v="${v}" class="px-4 py-2 rounded-full whitespace-nowrap ${cf==v?"bg-[#1E0A08] text-white":"border border-black/10 mut"}">${l}</button>`).join("");
+grid.innerHTML=Object.entries(D).filter(([k,v])=>!cf||v.c==cf).map(([k,v],i)=>`<a href="/produk?s=${k}" class="group cardx rounded-3xl p-4 md:p-6 flex flex-col justify-between min-h-[140px] md:min-h-[170px] hover:border-[#930500]/40 transition ${i==0&&!cf?"col-span-2 md:row-span-2":""}" style="${i==0&&!cf?"background:#930500;border-color:#930500;color:#FFF8E7":""}"><span class="w-12 h-12 rounded-2xl ${i==0&&!cf?"bg-[#FFF8E7] text-[#930500]":"bg-black/5 lime"} grid place-items-center group-hover:bg-[#930500] group-hover:text-white transition">${svg(k)}</span><div><p class="text-[11px] uppercase tracking-widest ${i==0&&!cf?"text-[#FFF8E7]/70":"mut"}">${v.c}</p><p class="disp font-bold ${i==0&&!cf?"text-2xl md:text-3xl":"text-base md:text-lg"} mt-1">${v.t}</p>${i==0&&!cf?`<p class="text-[#FFF8E7]/75 text-sm mt-2 max-w-xs">${v.d}</p>`:""}</div></a>`).join("")};
+tabs.onclick=e=>{const b=e.target.closest("button");if(!b)return;cf=b.dataset.v=="null"?null:b.dataset.v;draw()};draw();
+let op=null,nom=null;
+qn.oninput=()=>{const n=qn.value.replace(/\D/g,"").replace(/^62/,"0");op=Object.keys(OP).find(o=>OP[o].includes(n.slice(0,4)))||null;qo.textContent=op;qo.classList.toggle("hidden",!op);
+qp.innerHTML=op?D.pulsa.byp[op].slice(0,6).map((a,i)=>`<button data-i="${i}" class="opt rounded-xl py-2.5 text-sm ${nom==i?"on":""}"><b class="block">${a[0]}</b><span class="text-[11px] mut">${rp(a[1])}</span></button>`).join(""):"";qb.disabled=!(op&&nom!=null&&n.length>=10)};
+qp.onclick=e=>{const b=e.target.closest("button");if(!b)return;nom=+b.dataset.i;qn.oninput()};
+qb.onclick=()=>{const a=D.pulsa.byp[op][nom];location.href=`/bayar?s=pulsa&p=${encodeURIComponent(op)}&i=${encodeURIComponent(a[0])}&n=${qn.value.replace(/\D/g,"")}&a=${a[1]}`};
+const tx=["0812•••21 · Pulsa 50rb","Mobile Legends · 172 Diamonds","Token PLN 100rb","0857•••90 · Kuota 15GB","DANA · 100rb","Free Fire · 355 Diamonds","BPJS Kelas 3"];
+mq.innerHTML=[...tx,...tx].map(t=>`<span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#930500]"></span>${t}</span>`).join("");
+const F=[["Perlu daftar akun?","Nggak. Cukup isi nomor tujuan, bayar, dan simpan kode invoice."],["Berapa lama prosesnya?","Rata-rata beberapa detik setelah pembayaran terkonfirmasi."],["Kalau gagal gimana?","Dana dikembalikan otomatis ke metode pembayaranmu."],["Metode bayar apa saja?","QRIS, virtual account bank, e-wallet, dan gerai minimarket."]];
+faq.innerHTML=F.map(([q,a])=>`<details class="py-5 group"><summary class="flex justify-between items-center cursor-pointer font-medium text-lg">${q}<span class="pl transition text-2xl lime">+</span></summary><p class="mut mt-3">${a}</p></details>`).join("");
+
+const W=["ribet.","antre.","drama.","lama."];let wi=0;setInterval(()=>{rw.classList.add("out");setTimeout(()=>{wi=(wi+1)%W.length;rw.textContent=W[wi];rw.className="in";requestAnimationFrame(()=>requestAnimationFrame(()=>rw.className=""))},450)},2400);
+document.querySelectorAll("[data-c]").forEach(e=>{const t=+e.dataset.c;let n=0;const iv=setInterval(()=>{e.textContent=++n;if(n>=t)clearInterval(iv)},90)});
+</script></body></html>
