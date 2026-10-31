@@ -17,7 +17,7 @@ export type Slug =
 
 export type Category = "Isi ulang" | "Tagihan" | "Hiburan";
 
-export type PriceItem = [string, number];
+export type PriceItem = [string, number, string?];
 
 export type Service = {
   slug: Slug;
@@ -31,6 +31,7 @@ export type Service = {
   providers: string[];
   items?: PriceItem[];
   byProvider?: Record<string, PriceItem[]>;
+  dbServiceId?: string;
 };
 
 const rb = (value: number) => value.toLocaleString("id-ID");
@@ -289,12 +290,4 @@ export function detectOperator(raw: string): string | null {
 export function priceList(service: Service, provider: string | null): PriceItem[] {
   if (!provider) return service.items ?? [];
   return service.byProvider?.[provider] ?? service.items ?? [];
-}
-
-export function simulateBill(seed: string): number {
-  let hash = 0;
-  for (const character of seed) {
-    hash = (hash * 31 + character.charCodeAt(0)) % 9973;
-  }
-  return 75000 + ((hash * 137) % 250000);
 }

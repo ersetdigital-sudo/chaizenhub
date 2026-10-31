@@ -53,7 +53,7 @@ const faqs: FaqItem[] = [
     category: "Pesanan",
     question: "Cara cek status pesanan?",
     answer:
-      "Buka halaman Cek Invoice, lalu masukkan kode CZH- yang muncul setelah pembayaran.",
+      "Buka halaman Cek Invoice, lalu masukkan kode CHZ- yang muncul setelah pembayaran.",
     keywords: "invoice cek status lacak kode czh pesanan",
   },
   {
@@ -192,7 +192,7 @@ function ContactTicket() {
           </p>
           <p className="mt-1 text-sm font-semibold tracking-wide">{ADMIN_WHATSAPP}</p>
           <p className="mt-1 text-xs text-cosmic/60">
-            Sertakan kode invoice CZH- agar cepat dicek.
+            Sertakan kode invoice CHZ- agar cepat dicek.
           </p>
         </div>
       </div>

@@ -7,16 +7,16 @@ import {
   formatRupiah,
   normalizePhone,
   priceList,
-  services,
+  type Service,
 } from "@/lib/catalog";
 
-export function QuickTopup() {
+export function QuickTopup({ service }: { service: Service }) {
   const router = useRouter();
   const [number, setNumber] = useState("");
   const [operator, setOperator] = useState<string | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
 
-  const options = operator ? priceList(services.pulsa, operator).slice(0, 6) : [];
+  const options = operator ? priceList(service, operator).slice(0, 6) : [];
   const item = selected !== null ? options[selected] : null;
   const canContinue = !!operator && !!item && normalizePhone(number).length >= 10;
 
@@ -32,11 +32,13 @@ export function QuickTopup() {
   function handleContinue() {
     if (!operator || !item) return;
     const params = new URLSearchParams({
-      s: "pulsa",
+      s: service.slug,
       p: operator,
       i: item[0],
       n: number.replace(/\s/g, ""),
       a: String(item[1]),
+      sid: service.dbServiceId ?? "",
+      pid: item[2] ?? "",
     });
     router.push(`/bayar/?${params.toString()}`);
   }

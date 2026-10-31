@@ -4,7 +4,7 @@ import { InvoiceClient } from "@/components/InvoiceClient";
 
 export const metadata: Metadata = {
   title: "Cek Invoice",
-  description: "Lacak status pesanan Chaizenhub dengan kode invoice CZH-.",
+  description: "Lacak status pesanan Chaizenhub dengan kode invoice CHZ-.",
 };
 
 export default function InvoicePage() {

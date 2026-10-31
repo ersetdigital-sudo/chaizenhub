@@ -1,58 +1,31 @@
-import type { Slug } from "./catalog";
+const STORAGE_KEY = "chaizenhub_invoices";
 
-export type OrderStatus = "processing";
-
-export type Order = {
-  id: string;
-  slug: Slug;
-  title: string;
-  item: string;
-  provider: string;
-  target: string;
-  amount: number;
-  method: "QRIS";
-  status: OrderStatus;
-  createdAt: number;
-};
-
-const STORAGE_KEY = "chaizenhub_orders";
-
-function readOrders(): Record<string, Order> {
-  if (typeof window === "undefined") return {};
+export function rememberInvoice(ref: string) {
+  if (typeof window === "undefined") return;
+  const id = ref.trim().toUpperCase();
+  if (!id) return;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw) as Record<string, Order>;
-    return parsed && typeof parsed === "object" ? parsed : {};
+    const parsed = raw ? (JSON.parse(raw) as unknown) : [];
+    const list = Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === "string")
+      : [];
+    const next = [id, ...list.filter((item) => item !== id)].slice(0, 5);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   } catch {
-    return {};
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify([id]));
   }
 }
 
-function writeOrders(orders: Record<string, Order>) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-}
-
-export function getOrders(): Order[] {
-  return Object.values(readOrders()).sort((a, b) => b.createdAt - a.createdAt);
-}
-
-export function findOrder(code: string): Order | null {
-  const id = code.trim().toUpperCase();
-  if (!id) return null;
-  return readOrders()[id] ?? null;
-}
-
-export function createOrder(input: Omit<Order, "id" | "status" | "method" | "createdAt">): Order {
-  const order: Order = {
-    ...input,
-    id: `CZH-${Date.now().toString(36).toUpperCase()}`,
-    method: "QRIS",
-    status: "processing",
-    createdAt: Date.now(),
-  };
-  const orders = readOrders();
-  orders[order.id] = order;
-  writeOrders(orders);
-  return order;
+export function getRecentInvoices(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? (JSON.parse(raw) as unknown) : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === "string").slice(0, 5)
+      : [];
+  } catch {
+    return [];
+  }
 }

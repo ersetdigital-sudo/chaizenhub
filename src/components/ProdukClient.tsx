@@ -2,28 +2,22 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   detectOperator,
   formatRupiah,
-  isSlug,
   normalizePhone,
   priceList,
-  services,
-  simulateBill,
   type PriceItem,
-  type Slug,
+  type Service,
 } from "@/lib/catalog";
 import { ProviderAvatar } from "./ProviderAvatar";
 import { ServiceIcon } from "./ServiceIcon";
 
-export function ProdukClient() {
+export function ProdukClient({ service }: { service: Service }) {
   const router = useRouter();
   const params = useSearchParams();
-  const requested = params.get("s");
-  const slug: Slug = isSlug(requested) ? requested : "pulsa";
-  const service = services[slug];
-  const query = params.toString();
+  const slug = service.slug;
 
   const [target, setTarget] = useState(params.get("n") ?? "");
   const [provider, setProvider] = useState<string | null>(
@@ -31,30 +25,19 @@ export function ProdukClient() {
   );
   const [item, setItem] = useState<PriceItem | null>(null);
 
-  useEffect(() => {
-    const nextService = services[slug];
-    setProvider(nextService.auto ? null : nextService.providers[0]);
-    setItem(null);
-    setTarget(new URLSearchParams(query).get("n") ?? "");
-  }, [slug, query]);
-
   const list = priceList(service, provider);
-  const billAmount =
-    service.bill && target.trim().length > 5
-      ? simulateBill(target + (provider ?? ""))
-      : null;
-  const billItem: PriceItem | null =
-    billAmount !== null ? [`Tagihan ${provider}`, billAmount] : null;
-  const effectiveItem = service.bill ? billItem : item;
   const targetValid = service.auto
     ? normalizePhone(target).length >= 10
     : target.trim().length >= 6;
+  const billItem: PriceItem | null =
+    service.bill && targetValid && service.items?.[0] ? service.items[0] : null;
+  const effectiveItem = service.bill ? billItem : item;
   const canPay = targetValid && !!provider && !!effectiveItem;
 
   const hint = service.auto
     ? "Operator terdeteksi otomatis dari 4 digit pertama."
     : service.bill
-      ? "Tagihan muncul otomatis setelah ID diisi."
+      ? "Nominal tagihan diambil dari katalog, admin memverifikasi sebelum diproses."
       : "Pastikan data benar, transaksi sukses tidak bisa dibatalkan.";
 
   function handleTarget(value: string) {
@@ -81,6 +64,8 @@ export function ProdukClient() {
       i: effectiveItem[0],
       n: target.trim(),
       a: String(effectiveItem[1]),
+      sid: service.dbServiceId ?? "",
+      pid: effectiveItem[2] ?? "",
     });
     router.push(`/bayar/?${next.toString()}`);
   }
@@ -245,8 +230,8 @@ export function ProdukClient() {
                   <div>
                     <b>{billItem[0]}</b>
                     <p className="mt-1 text-xs text-mute">
-                      Pelanggan •••{target.trim().slice(-4)} · termasuk admin Rp2.500 ·
-                      contoh
+                      Pelanggan •••{target.trim().slice(-4)} · {provider} · nominal
+                      dari katalog
                     </p>
                   </div>
                   <b className="disp whitespace-nowrap text-xl">

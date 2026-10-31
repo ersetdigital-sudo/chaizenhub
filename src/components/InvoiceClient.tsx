@@ -2,33 +2,80 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ADMIN_WHATSAPP_URL, formatRupiah } from "@/lib/catalog";
-import { findOrder, getOrders, type Order } from "@/lib/store";
+import { getRecentInvoices } from "@/lib/store";
 
-type Result = { code: string; order: Order | null };
+type PublicStatus = "success" | "processing" | "pending" | "expired";
+
+type InvoiceOrder = {
+  inv: string;
+  status: PublicStatus;
+  service: string;
+  product: string;
+  lines: [string, string][];
+  method: string;
+  total: number;
+  sn: string;
+  label: string;
+  created: number;
+  updated: number;
+  paidAt?: number;
+};
+
+type Result = { code: string; order: InvoiceOrder | null };
+
+const statusText: Record<PublicStatus, string> = {
+  pending: "Menunggu pembayaran",
+  processing: "Sedang diproses",
+  success: "Selesai",
+  expired: "Dibatalkan",
+};
+
+function formatDate(value: number) {
+  return new Date(value).toLocaleString("id-ID", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
 
 export function InvoiceClient() {
   const params = useSearchParams();
   const initialId = params.get("id") ?? "";
   const [code, setCode] = useState(initialId);
   const [result, setResult] = useState<Result | null>(null);
-  const [recent, setRecent] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [recent, setRecent] = useState<string[]>([]);
 
   useEffect(() => {
-    setRecent(getOrders().slice(0, 5));
+    setRecent(getRecentInvoices());
+  }, []);
+
+  const show = useCallback(async (value: string) => {
+    const id = value.trim().toUpperCase();
+    if (!id) return;
+    setCode(id);
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/orders/${encodeURIComponent(id)}`, {
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        setResult({ code: id, order: null });
+        return;
+      }
+      const order = (await response.json()) as InvoiceOrder;
+      setResult({ code: id, order });
+    } catch {
+      setResult({ code: id, order: null });
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    if (!initialId) return;
-    const id = initialId.trim().toUpperCase();
-    setResult({ code: id, order: findOrder(id) });
-  }, [initialId]);
-
-  function show(value: string) {
-    const id = value.trim().toUpperCase();
-    setResult({ code: id, order: findOrder(id) });
-  }
+    if (initialId) void show(initialId);
+  }, [initialId, show]);
 
   return (
     <main className="relative z-10 mx-auto max-w-2xl px-5 pb-20 pt-12 md:pt-20">
@@ -36,14 +83,14 @@ export function InvoiceClient() {
         Lacak pesananmu
       </h1>
       <p className="mt-3 text-center text-mute">
-        Masukkan kode invoice yang diawali <b className="text-ink">CZH-</b>
+        Masukkan kode invoice yang diawali <b className="text-ink">CHZ-</b>
       </p>
 
       <form
         className="glass mt-8 flex rounded-full p-2"
         onSubmit={(event) => {
           event.preventDefault();
-          show(code);
+          void show(code);
         }}
       >
         <label htmlFor="invoice-code" className="sr-only">
@@ -53,13 +100,17 @@ export function InvoiceClient() {
           id="invoice-code"
           value={code}
           onChange={(event) => setCode(event.target.value)}
-          placeholder="CZH-XXXXXXX"
+          placeholder="CHZ-XXXXXX"
           autoComplete="off"
           spellCheck={false}
           className="min-w-0 flex-1 bg-transparent px-5 uppercase outline-none placeholder:normal-case"
         />
-        <button type="submit" className="btn-sangria rounded-full px-6 py-3">
-          Cek
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-sangria rounded-full px-6 py-3"
+        >
+          {loading ? "Mencari…" : "Cek"}
         </button>
       </form>
 
@@ -69,8 +120,8 @@ export function InvoiceClient() {
             <OrderCard order={result.order} />
           ) : (
             <div className="cardx rounded-3xl p-6 text-center text-mute">
-              Invoice <b className="text-ink">{result.code || "–"}</b> tidak ditemukan
-              di perangkat ini.
+              Invoice <b className="text-ink">{result.code || "–"}</b> tidak ditemukan.
+              Pastikan kode sudah benar.
               <Link
                 href="/#produk"
                 className="mt-4 block text-sm font-semibold text-sangria"
@@ -86,20 +137,15 @@ export function InvoiceClient() {
         <div className="mt-10">
           <p className="mb-3 text-sm text-mute">Riwayat di perangkat ini</p>
           <div className="space-y-2">
-            {recent.map((order) => (
+            {recent.map((ref) => (
               <button
-                key={order.id}
+                key={ref}
                 type="button"
-                onClick={() => {
-                  setCode(order.id);
-                  show(order.id);
-                }}
+                onClick={() => void show(ref)}
                 className="opt flex w-full items-center justify-between gap-4 rounded-2xl p-4 text-left text-sm"
               >
-                <span className="min-w-0 truncate">
-                  {order.title} · {order.item}
-                </span>
-                <span className="shrink-0 text-mute">{order.id}</span>
+                <span className="min-w-0 truncate font-mono">{ref}</span>
+                <span className="shrink-0 text-mute">Cek status →</span>
               </button>
             ))}
           </div>
@@ -109,33 +155,25 @@ export function InvoiceClient() {
   );
 }
 
-function OrderCard({ order }: { order: Order }) {
-  const rows = [
-    ["Produk", `${order.title} · ${order.item}`],
-    ["Provider", order.provider],
-    ["Tujuan", order.target],
+function OrderCard({ order }: { order: InvoiceOrder }) {
+  const rows: [string, string][] = [
+    ...order.lines,
     ["Metode", order.method],
-    [
-      "Waktu",
-      new Date(order.createdAt).toLocaleString("id-ID", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      }),
-    ],
-    ["Total", formatRupiah(order.amount)],
+    ["Waktu", formatDate(order.created)],
+    ["Total", formatRupiah(order.total)],
   ];
   const waUrl = `${ADMIN_WHATSAPP_URL}?text=${encodeURIComponent(
-    `Halo admin Chaizenhub, saya ingin cek invoice ${order.id}.`,
+    `Halo admin Chaizenhub, saya ingin cek invoice ${order.inv}.`,
   )}`;
 
   return (
     <article className="cardx overflow-hidden rounded-[28px]">
       <div className="bg-sangria p-7 text-cosmic">
         <p className="text-xs font-semibold opacity-70">INVOICE</p>
-        <p className="disp mt-1 text-2xl font-bold">{order.id}</p>
+        <p className="disp mt-1 text-2xl font-bold">{order.inv}</p>
         <p className="mt-4 inline-flex items-center gap-2 rounded-full bg-cosmic px-3 py-1.5 text-xs font-semibold text-sangria">
           <span className="h-1.5 w-1.5 rounded-full bg-sangria" />
-          Sedang diproses
+          {statusText[order.status]}
         </p>
       </div>
 
@@ -147,6 +185,15 @@ function OrderCard({ order }: { order: Order }) {
           </div>
         ))}
       </dl>
+
+      {order.sn ? (
+        <div className="mx-7 mb-5 rounded-2xl border border-sangria/20 bg-cosmic p-4">
+          <p className="text-xs uppercase tracking-widest text-mute">{order.label}</p>
+          <p className="disp mt-1 break-all text-lg font-bold text-sangria">
+            {order.sn}
+          </p>
+        </div>
+      ) : null}
 
       <div className="px-7 pb-7">
         <p className="rounded-2xl bg-cosmic p-4 text-xs text-mute">
@@ -163,10 +210,10 @@ function OrderCard({ order }: { order: Order }) {
             Konfirmasi via WhatsApp
           </a>
           <Link
-            href={`/produk/?s=${order.slug}`}
+            href="/#produk"
             className="rounded-full border border-black/15 px-5 py-2.5 hover:bg-black/5"
           >
-            Beli lagi
+            Buat pesanan baru
           </Link>
         </div>
       </div>

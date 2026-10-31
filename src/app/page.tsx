@@ -4,6 +4,7 @@ import { CountUp } from "@/components/CountUp";
 import { ProductExplorer } from "@/components/ProductExplorer";
 import { QuickTopup } from "@/components/QuickTopup";
 import { WordRotator } from "@/components/WordRotator";
+import { getStorefront } from "@/lib/catalog-hydrate";
 
 const transactions = [
   "0812•••21 · Pulsa 50rb",
@@ -35,7 +36,9 @@ const faq = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const storefront = await getStorefront();
+
   return (
     <main className="relative z-10">
       <section className="relative">
@@ -140,7 +143,7 @@ export default function HomePage() {
             <p className="text-sm text-mute">Order kilat</p>
             <p className="disp mt-1 text-xl font-bold">Isi pulsa sekarang</p>
             <div className="mt-6">
-              <QuickTopup />
+              <QuickTopup service={storefront.services.pulsa} />
             </div>
           </div>
         </div>
